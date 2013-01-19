@@ -9,48 +9,22 @@ namespace ClockDrive
     {
         public string ImagePath { get; set; }
         public DateTime time { get; private set; }
-
-        public BackGround(string imagePath)
-        {
-            ImagePath = imagePath;
-        }
+        private List<string> ImageFileNames = new List<string> { "bg01.png", "bg02.png", "bg03.png", "bg04.png" };
 
         public string SrcImagePath
         {
             get
             {
-                switch (time.Hour / 6)
-                {
-                    case 0:
-                        return ImagePath + @"bg01.png";
-                    case 1:
-                        return ImagePath + @"bg02.png";
-                    case 2:
-                        return ImagePath + @"bg03.png";
-                    case 3:
-                        return ImagePath + @"bg04.png";
-                    default:
-                        return ImagePath + @"bg01.png";
-                }
+                var path = ImagePath + ImageFileNames[(time.Hour / 6 + 0) % 4];
+                return path;
             }
         }
         public string DestImagePath
         {
             get
             {
-                switch (time.Hour / 6)
-                {
-                    case 0:
-                        return ImagePath + @"bg02.png";
-                    case 1:
-                        return ImagePath + @"bg03.png";
-                    case 2:
-                        return ImagePath + @"bg04.png";
-                    case 3:
-                        return ImagePath + @"bg01.png";
-                    default:
-                        return ImagePath + @"bg06.png";
-                }
+                var path = ImagePath + ImageFileNames[(time.Hour / 6 + 1) % 4];
+                return path;
             }
         }
         public double BlendRatio
@@ -61,11 +35,15 @@ namespace ClockDrive
             }
         }
 
+        public BackGround(string imagePath)
+        {
+            ImagePath = imagePath;
+        }
+
         public void SetTime(DateTime t)
         {
             time = t;
         }
-
 
     }
 }

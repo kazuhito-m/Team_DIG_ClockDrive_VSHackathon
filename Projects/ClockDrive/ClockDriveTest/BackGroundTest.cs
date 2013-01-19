@@ -15,7 +15,7 @@ namespace ClockDriveTest
         [SetUp]
         public void Setup()
         {
-            bg = new BackGround(@"C:\Dev_Private\VSハッカソン\Projects\ClockDrive\ClockDrive\bin\Debug\images\");
+            bg = new BackGround(@"C:\Dev_Private\Team_DIG_ClockDrive_VSHackathon\Projects\ClockDrive\ClockDrive\bin\Debug\images\");
         }
 
         [TestCase]

@@ -19,7 +19,7 @@ namespace ClockDrive
         public DateTime currentTime { get; set; }
 
         /// <summary>
-        /// 
+        /// 各種モデルクラスをインスタンス化する
         /// </summary>
         public Form1()
         {
@@ -48,6 +48,12 @@ namespace ClockDrive
             Invalidate();
         }
 
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            DrawBackGround(e.Graphics, currentTime);
+            DrawCar(e.Graphics, currentTime);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -58,17 +64,19 @@ namespace ClockDrive
 
             var srcImage = new Bitmap(bg.SrcImagePath);
             var destImage = new Bitmap(bg.DestImagePath);
-            var numberImage = new Bitmap(Application.StartupPath + @"\images\road.png");
 
+            // ブレンド比率をセットしておく
             var cm = new ColorMatrix();
             cm.Matrix33 = (float)bg.BlendRatio;
             var ia = new ImageAttributes();
             ia.SetColorMatrix(cm);
+
             // ブレンド元の背景を描く
             g.DrawImage(
                 srcImage,
                 new Rectangle(0, 0, this.Width, this.Height)
                 );
+
             // ブレンド先の背景を描く
             g.DrawImage(
                 destImage,
@@ -91,19 +99,21 @@ namespace ClockDrive
 
             var carImage = new Bitmap(Application.StartupPath + @"\images\car.png");
             // 車を回転させて描く
-            g.ResetTransform();
-            g.TranslateTransform(this.Width / 2, this.Height / 2);
-            g.TranslateTransform(car.Position.X, car.Position.Y);
-            g.RotateTransform((float)(car.Angle));
+            g.ResetTransform(); //行列をリセットし、直前までの状態を反映させない
+
+            g.TranslateTransform(this.Width / 2, this.Height / 2);  //フォーム中心へ移動させる
+            g.TranslateTransform(car.Position.X, car.Position.Y);   //時刻に応じた位置へ移動させる
+            g.RotateTransform((float)(car.Angle));                  //本体のみ回転させる
             g.DrawImage(
                 carImage,
-                //new Rectangle(car.Position.X, car.Position.Y, 30, 30)
                 new Rectangle(0, 0, 30, 30)
                 );
+
+            g.ResetTransform(); //行列をリセットし、直前までの状態を反映させない
         }
 
         /// <summary>
-        /// デバッグ用、時刻を強制指定できる別画面を表示する
+        /// デバッグ用、時刻を強制指定できる別画面を表示する（表示すると同時にタイマーを停止する）
         /// </summary>
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -113,12 +123,6 @@ namespace ClockDrive
                 var debugForm = new DebugForm(this);
                 debugForm.Show();
             }
-        }
-
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-            DrawBackGround(e.Graphics, currentTime);
-            DrawCar(e.Graphics, currentTime);
         }
     }
 }

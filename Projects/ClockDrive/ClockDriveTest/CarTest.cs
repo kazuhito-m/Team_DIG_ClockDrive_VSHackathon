@@ -33,8 +33,10 @@ namespace ClockDriveTest
         }
 
         [TestCase(0, 0, 0, 0.0)]
-        [TestCase(12, 0, 0, 180.0)]
-        public void プロパティが読める(int hour, int minute, int second, double angle)
+        [TestCase(6, 0, 0, 0.5)]
+        [TestCase(12, 0, 0, 0)]
+        [TestCase(23, 0, 0, 1.0 - (1.0 / 12))]
+        public void 与えた時刻に応じて文字盤上の角度が得られる(int hour, int minute, int second, double angle)
         {
             car.SetTime(new DateTime(2000, 1, 1, hour, minute, second));
             Assert.AreEqual(angle, car.CulcPositionAngleRatio());

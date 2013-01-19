@@ -22,11 +22,14 @@ namespace ClockDrive
             time = t;
         }
 
+        /// <summary>
+        /// 時刻に応じた角度を算出するための係数を、0～1.0の範囲で得る
+        /// </summary>
+        /// <returns></returns>
         public double CulcPositionAngleRatio()
         {
-            double divider = ((double)(time.Hour % 12) / 12.0) + (double)(time.Minute % 60 / 60.0 / 12);
-            // (double)((time.Hour % 12) / 12.0 * 60 * 60) / (24 * 60 * 60); // ((time.Hour % 12) * 60 * 60 + (time.Minute % 60) * 60 + (time.Second % 60)) / (24 * 60 * 60);
-            return divider;
+            double ratio = (double)((time.Hour % 12) / 12.0) + (time.Minute % 60 / 60.0 / 12) + (time.Second % 60 / 60.0 / 60.0 / 12);
+            return ratio;
         }
 
         /// <summary>
@@ -36,6 +39,7 @@ namespace ClockDrive
         {
             get
             {
+                //TODO: 本当はRoadクラスから得るべき
                 double divider = CulcPositionAngleRatio() - 0.25;
                 var angle = (divider == 0 ? 0 : (Math.PI * 2) * divider);
                 return new Point(
@@ -52,8 +56,8 @@ namespace ClockDrive
         {
             get
             {
+                //TODO: 本当はRoadクラスから得るべき（前後あわせて３位置から補完する）
                 return (CulcPositionAngleRatio() + 0.75) * 360;
-                //return new Random().NextDouble() * 360;
             }
         }
     }
