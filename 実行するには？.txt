@@ -1,0 +1,3 @@
+■実行するには？
+\Projects\ClockDrive\ClockDrive\bin\Debug\ClockDrive.exe
+（※.NET Framework 4.0が必要です）
