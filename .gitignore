@@ -1,0 +1,9 @@
+/.svn
+/Temp
+obj/
+*.suo
+*.vshost.*
+*.VisualState.xml
+/Projects/ClockDrive/ClockDrive/*.user
+/Projects/ClockDrive/ClockDriveTest/bin*
+TestResult.xml
