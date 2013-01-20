@@ -13,6 +13,13 @@ namespace ClockDrive
         /// </summary>
         internal DateTime time;
 
+        private Road road;
+
+        public Car(Road road)
+        {
+            this.road = road;
+        }
+
         /// <summary>
         /// 基準時刻を与える
         /// </summary>
@@ -23,41 +30,29 @@ namespace ClockDrive
         }
 
         /// <summary>
-        /// 時刻に応じた角度を算出するための係数を、0～1.0の範囲で得る
-        /// </summary>
-        /// <returns></returns>
-        public double CulcPositionAngleRatio()
-        {
-            var ratio = (time.Hour % 12 / 12.0) + (time.Minute % 60 / 60.0 / 12) + (time.Second % 60 / 60.0 / 60.0 / 12);
-            return ratio;
-        }
-
-        /// <summary>
         /// 車を描くべき位置を取得する
         /// </summary>
-        public Point Position
+        public PointF Position
         {
             get
             {
-                //TODO: 本当はRoadクラスから得るべき
-                double divider = CulcPositionAngleRatio() - 0.25;
-                var angle = (divider == 0 ? 0 : (Math.PI * 2) * divider);
-                return new Point(
-                    (int)(0 + 150 * Math.Cos(angle)),
-                    (int)(0 + 150 * Math.Sin(angle))
-                    );
+                return road.GetRoadPosition(time);
             }
         }
 
         /// <summary>
-        /// 車を描くべき角度を取得する
+        /// 車を描くべき角度を取得する（前後２点から滑らかに補完する）
         /// </summary>
         public double Angle
         {
             get
             {
-                //TODO: 本当はRoadクラスから得るべき（前後あわせて３位置から補完する）
-                return (CulcPositionAngleRatio() + 0.75) * 360;
+                var posA = road.GetRoadPosition(time.AddSeconds(-5));
+                var posB = road.GetRoadPosition(time.AddSeconds(+5));
+                var xDiff = (posA.X - posB.X);
+                var yDiff = (posA.Y - posB.Y);
+                var angle = Math.Atan2(yDiff, xDiff);
+                return angle / Math.PI / 2.0 * 360.0 + 90.0;
             }
         }
     }

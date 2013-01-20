@@ -11,12 +11,14 @@ namespace ClockDriveTest
     [TestFixture]
     class CarTest
     {
+        private Road road;
         private Car car;
 
         [SetUp]
         public void Setup()
         {
-            car = new Car();
+            road = new Road(@"C:\Dev_Private\Team_DIG_ClockDrive_VSHackathon\Projects\ClockDrive\ClockDrive\datas\RoadData.csv");
+            car = new Car(road);
         }
 
         [TestCase]
@@ -28,18 +30,31 @@ namespace ClockDriveTest
         [TestCase]
         public void プロパティが読める()
         {
-            Point position = car.Position;
+            car.SetTime(DateTime.Now);
+            PointF position = car.Position;
             double angle = car.Angle;
         }
 
-        [TestCase(0, 0, 0, 0.0)]
-        [TestCase(6, 0, 0, 0.5)]
-        [TestCase(12, 0, 0, 0)]
-        [TestCase(23, 0, 0, 1.0 - (1.0 / 12))]
-        public void 与えた時刻に応じて文字盤上の角度が得られる(int hour, int minute, int second, double angle)
+        [TestCase(0, 0, 0, 0, 0, 30, "異なるはず")]
+        [TestCase(0, 1, 0, 0, 2, 0, "異なるはず")]
+        [TestCase(0, 59, 30, 1, 0, 0, "異なるはず")]
+        [TestCase(11, 59, 30, 12, 0, 0, "異なるはず")]
+        [TestCase(0, 0, 0, 12, 0, 0, "同じはず")]
+        [TestCase(6, 0, 0, 18, 0, 0, "同じはず")]
+        public void 与えた時間に応じて_角度が変化する(int hourA, int minuteA, int secondA, int hourB, int minuteB, int secondB, string expectTo)
         {
-            car.SetTime(new DateTime(2000, 1, 1, hour, minute, second));
-            Assert.AreEqual(angle, car.CulcPositionAngleRatio());
+            car.SetTime(new DateTime(2000, 1, 1, hourA, minuteA, secondA));
+            var angleA = car.Angle;
+            car.SetTime(new DateTime(2000, 1, 1, hourB, minuteB, secondB));
+            var angleB = car.Angle;
+            if (expectTo[0].Equals('異'))
+            {
+                Assert.AreNotEqual(angleA, angleB);
+            }
+            else
+            {
+                Assert.AreEqual(angleA, angleB);
+            }
         }
     }
 }

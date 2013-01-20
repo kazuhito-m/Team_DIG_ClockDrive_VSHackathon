@@ -14,6 +14,7 @@ namespace ClockDrive
     {
 
         private BackGround bg;
+        private Road road;
         private Car car;
         private Dictionary<string, Bitmap> ImageCache;
         private DateTime currentTime;
@@ -26,7 +27,8 @@ namespace ClockDrive
             InitializeComponent();
 
             bg = new BackGround(Application.StartupPath + @"\images\");
-            car = new Car();
+            road = new Road(Application.StartupPath + @"\datas\RoadData.csv");
+            car = new Car(road);
             ImageCache = new Dictionary<string, Bitmap>();
 
             // 最初に、現在時刻の状態を描いておく
@@ -114,7 +116,6 @@ namespace ClockDrive
 
             g.ResetTransform(); // ※行列をリセットし、直前までの状態を反映させない
 
-            g.TranslateTransform(this.Width / 2, this.Height / 2);  //フォーム中心へ移動させる
             g.TranslateTransform(car.Position.X, car.Position.Y);   //時刻に応じた適切な位置へ移動させる
             g.RotateTransform((float)(car.Angle));                  //回転させる
             g.DrawImage(
@@ -134,11 +135,11 @@ namespace ClockDrive
         private void DrawDigitalTime(Graphics g, DateTime current)
         {
             this.Text = string.Format("{0} - {1}", current.ToString(), Application.ProductName);
-            var fnt = new Font("MS UI Gothic", 40);
+            var f = new Font("MS UI Gothic", 40);
             for (var i = 0; i < 2; i++)
             {
                 g.DrawString(current.ToLongTimeString(),
-                             fnt,
+                             f,
                              (i == 0 ? Brushes.DarkBlue : Brushes.LightBlue),
                              20 - i * 1, this.Height - 100 - i * 2
                              );

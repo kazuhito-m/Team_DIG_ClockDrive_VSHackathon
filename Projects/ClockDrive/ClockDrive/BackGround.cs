@@ -20,36 +20,34 @@ namespace ClockDrive
 
         /// <summary>
         /// 背景画像Ａのファイルパス（２枚ブレンドするうち、先にベタ塗りする方）
+        /// たとえば全部で４枚なら、２４Ｈを４等分し、６時間ごとに切り替わっていく
         /// </summary>
         public string SrcImagePath
         {
-            get
-            {
-                var idx = (0 + time.Hour / (24 / ImageFileNames.Length)) % (ImageFileNames.Length);
-                return ImageFileNames[idx];
-            }
+            get { return ImageFileNames[(0 + time.Hour / (24 / ImageFileNames.Length)) % (ImageFileNames.Length)]; }
         }
 
         /// <summary>
         /// 背景画像Ｂのファイルパス（２枚ブレンドするうち、後で半透明に描く方）
+        /// たとえば全部で４枚なら、２４Ｈを４等分し、６時間ごとに切り替わっていく
         /// </summary>
         public string DestImagePath
         {
-            get
-            {
-                var idx = (1 + time.Hour / (24 / ImageFileNames.Length)) % (ImageFileNames.Length);
-                return ImageFileNames[idx];
-            }
+            get { return ImageFileNames[(1 + time.Hour / (24 / ImageFileNames.Length)) % (ImageFileNames.Length)]; }
         }
 
         /// <summary>
         /// 背景画像ＡとＢのブレンド率
+        /// たとえば全部で４枚なら、２４Ｈを４等分し、６時間ごとに0～1.0を繰り返す
         /// </summary>
         public double BlendRatio
         {
             get
             {
-                var ratio = (time.Hour % 6 / 6.0) + (time.Minute % 60 / 60.0 / 6.0) + (time.Second % 60 / 60.0 / 60.0 / 6.0);
+                var ratio = ((time.Hour % (24 / ImageFileNames.Length))
+                            + (time.Minute % 60 / 60.0)
+                            + (time.Second % 60 / 60.0 / 60.0)
+                            ) / (24 / ImageFileNames.Length);
                 return ratio;
             }
         }

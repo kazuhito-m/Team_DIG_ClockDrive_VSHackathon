@@ -51,6 +51,7 @@ namespace ClockDriveTest
         public void 背景４枚のとき_時刻指定に応じた_適切な画像ファイルパスのペアとブレンド率を返す(int hour, int minute, int second, string bgA, string bgB, double blend)
         {
             bg.ImageFileNames = new string[] { "bg01.png", "bg02.png", "bg03.png", "bg04.png" };
+
             bg.SetTime(new DateTime(2000, 1, 1, hour, minute, second));
             Assert.That(bg.SrcImagePath, Is.EqualTo(bgA));
             Assert.That(bg.DestImagePath, Is.EqualTo(bgB));
@@ -66,6 +67,7 @@ namespace ClockDriveTest
         public void 背景６枚のときも_時刻指定に応じた_適切な画像ファイルパスのペアとブレンド率を返す(int hour, int minute, int second, string bgA, string bgB, double blend)
         {
             bg.ImageFileNames = new string[] { "bg01.png", "bg02.png", "bg03.png", "bg04.png", "bg05.png", "bg06.png" };
+
             bg.SetTime(new DateTime(2000, 1, 1, hour, minute, second));
             Assert.That(bg.SrcImagePath, Is.EqualTo(bgA));
             Assert.That(bg.DestImagePath, Is.EqualTo(bgB));

@@ -6,12 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace ClockDrive
 {
     public partial class DebugForm : Form
     {
         private Form1 SUT;
+        private DateTime recordStarted;
+        private Road recordRoad;
+        private const double intervalSeconds = 5.0;
 
         /// <summary>
         /// 生成時に、親フォームへの参照を退避しておく
@@ -20,6 +24,7 @@ namespace ClockDrive
         {
             InitializeComponent();
             SUT = sut;
+            recordRoad = new Road(Application.StartupPath + @"\datas\RoadData.csv");
         }
 
         /// <summary>
@@ -46,12 +51,81 @@ namespace ClockDrive
         private void Simulate_Click(object sender, EventArgs e)
         {
             var totalHours = (sender == Simulate24Hour ? 24 : 1);
-            var intervalSeconds = (sender == Simulate24Hour ? 60 * 20 : 45);
+            var intervalSeconds = (sender == Simulate24Hour ? 240 : 45);
             var startTime = (sender == Simulate24Hour ? new DateTime(2000, 1, 1, 0, 0, 0) : DateTime.Now);
             for (var i = 0; i <= (totalHours * 60 * 60); i += intervalSeconds)
             {
                 SUT.Draw(startTime.AddSeconds(i));
                 Application.DoEvents();
+            }
+        }
+
+        /// <summary>
+        /// 道の軌跡を、手動で記録する
+        /// </summary>
+        private void RecordRoad_Click(object sender, EventArgs e)
+        {
+            var instruction = string.Format(
+                "今から、マウスポインタの動きどおりに道の軌跡を記録します。"
+                + "\n■ OKをクリックした{0}秒後から、軌跡の記録が開始されます。"
+                + "\n■ つまり、{0}秒以内に'0時'にあたる位置にマウスポインタを置いてください。"
+                + "\n■ そして、{0}秒間かけて'0時'から'1時'にあたる位置まで動かしていってください。"
+                + "\n■ まず'0時'から'1時'の部分を記録し、その後は{0}秒ごとに、'1時'から'2時'の部分、'2時'から'3時'の部分、と移っていきます。"
+                + "\n■ '11時'から'12時'の部分を記録し終わったら、道の軌跡が出来上がります。",
+                intervalSeconds
+                );
+            var result = MessageBox.Show(instruction, "道の軌跡を、手動で記録する", MessageBoxButtons.OKCancel);
+            if (result == System.Windows.Forms.DialogResult.Cancel) return;
+
+            timer1.Enabled = true;
+            recordStarted = DateTime.Now;
+            recordRoad.roadPositions.Clear();
+        }
+
+        /// <summary>
+        /// 道の軌跡を、手動で記録する
+        /// </summary>
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            var recordingHour = DateTime.Now.Subtract(recordStarted).TotalSeconds / intervalSeconds - 1.0;
+
+            // 最後まで記録したら、一時CSVファイルへ保存する
+            if (recordingHour >= 12)
+            {
+                timer1.Enabled = false;
+                var exportFilePath = Application.StartupPath + string.Format(@"\datas\RoadData.{0}.csv", DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+                using (var writer = new StreamWriter(exportFilePath))
+                {
+                    foreach(var pos in recordRoad.roadPositions)
+                    {
+                        writer.WriteLine(string.Format("{0},{1}", pos.X, pos.Y));
+                    }
+                }
+                MessageBox.Show(string.Format("道の軌跡を記録しました！\n出力CSV '{0}'", exportFilePath), "お疲れ様です！！");
+                return;
+            }
+
+            // どこを記録中で、残り時間があと何秒かを更新し続ける
+            var elapsed = intervalSeconds * (recordingHour - (int)recordingHour);
+            this.Text = (recordingHour < 0
+                ? string.Format("あと{0:0.00}秒後に記録を開始します。", -elapsed)
+                : string.Format("{0}時～{1}時を記録中、あと{2:0.00}秒", (int)recordingHour, ((int)recordingHour + 1) % 12, intervalSeconds - elapsed)
+                );
+            RecordRoad.Text = this.Text;
+
+            // 親フォーム上の座標を記録し続ける
+            if (recordingHour >= 0)
+            {
+                var pos = SUT.PointToClient(Cursor.Position);
+                recordRoad.roadPositions.Add(pos);
+                using (var g = SUT.CreateGraphics())
+                {
+                    var color = Color.FromArgb((int)(elapsed * 256 / intervalSeconds), 128, 255 - (int)(elapsed * 256 / intervalSeconds));
+                    var f = new Font("MS UI Gothic", 12);
+                    g.DrawString(string.Format("{0}→{1}", (int)recordingHour, (int)recordingHour + 1),
+                                 f, new SolidBrush(color), pos.X, pos.Y
+                                 );
+                }
             }
         }
 
