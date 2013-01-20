@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace ClockDrive
 {
@@ -24,8 +25,8 @@ namespace ClockDrive
         {
             get
             {
-                var path = ImageFileNames[(time.Hour / 6 + 0) % 4];
-                return path;
+                var idx = (0 + time.Hour / (24 / ImageFileNames.Length)) % (ImageFileNames.Length);
+                return ImageFileNames[idx];
             }
         }
 
@@ -36,8 +37,8 @@ namespace ClockDrive
         {
             get
             {
-                var path = ImageFileNames[(time.Hour / 6 + 1) % 4];
-                return path;
+                var idx = (1 + time.Hour / (24 / ImageFileNames.Length)) % (ImageFileNames.Length);
+                return ImageFileNames[idx];
             }
         }
 
@@ -48,7 +49,8 @@ namespace ClockDrive
         {
             get
             {
-                return (double)time.Hour % 6 / 6.0;
+                var ratio = (time.Hour % 6 / 6.0) + (time.Minute % 60 / 60.0 / 6.0) + (time.Second % 60 / 60.0 / 60.0 / 6.0);
+                return ratio;
             }
         }
 
@@ -58,7 +60,7 @@ namespace ClockDrive
         /// <param name="imagePath"></param>
         public BackGround(string imagePath)
         {
-            ImageFileNames = System.IO.Directory.GetFiles(imagePath, "bg*.png");
+            ImageFileNames = Directory.GetFiles(imagePath, "bg*.png");
         }
 
         /// <summary>

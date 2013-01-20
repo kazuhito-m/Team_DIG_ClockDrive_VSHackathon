@@ -28,7 +28,7 @@ namespace ClockDrive
         /// <returns></returns>
         public double CulcPositionAngleRatio()
         {
-            double ratio = (double)((time.Hour % 12) / 12.0) + (time.Minute % 60 / 60.0 / 12) + (time.Second % 60 / 60.0 / 60.0 / 12);
+            var ratio = (time.Hour % 12 / 12.0) + (time.Minute % 60 / 60.0 / 12) + (time.Second % 60 / 60.0 / 60.0 / 12);
             return ratio;
         }
 
