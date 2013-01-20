@@ -37,8 +37,8 @@ namespace ClockDriveTest
 
         [TestCase(0, 0, 0, 0, 0, 30, "異なるはず")]
         [TestCase(0, 1, 0, 0, 2, 0, "異なるはず")]
-        [TestCase(0, 59, 30, 1, 0, 0, "異なるはず")]
-        [TestCase(11, 59, 30, 12, 0, 0, "異なるはず")]
+        [TestCase(1, 59, 0, 2, 0, 0, "異なるはず")]
+        [TestCase(11, 59, 0, 12, 0, 0, "異なるはず")]
         [TestCase(0, 0, 0, 12, 0, 0, "同じはず")]
         [TestCase(6, 0, 0, 18, 0, 0, "同じはず")]
         public void 与えた時間に応じて_角度が変化する(int hourA, int minuteA, int secondA, int hourB, int minuteB, int secondB, string expectTo)

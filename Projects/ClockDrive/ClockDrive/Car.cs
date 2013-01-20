@@ -13,8 +13,15 @@ namespace ClockDrive
         /// </summary>
         internal DateTime time;
 
+        /// <summary>
+        /// 車の位置や角度を算出するためのRoadインスタンス
+        /// </summary>
         private Road road;
 
+        /// <summary>
+        /// コンストラクタ（Roadインスタンスを受け取って、格納しておく）
+        /// </summary>
+        /// <param name="road"></param>
         public Car(Road road)
         {
             this.road = road;

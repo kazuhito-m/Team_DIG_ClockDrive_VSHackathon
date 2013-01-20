@@ -10,15 +10,27 @@ namespace ClockDrive
 {
     public class Road
     {
+        /// <summary>
+        /// 道路上の位置の一覧
+        /// </summary>
         public List<PointF> roadPositions { get; private set; }
 
         /// <summary>
-        /// コンストラクタ（カンマ区切りかタブ区切りの道路上座標ＣＳＶファイルを読み込み、格納しておく）
+        /// コンストラクタ
         /// </summary>
         /// <param name="roadCsvFilePath"></param>
         public Road(string roadCsvFilePath)
         {
             roadPositions = new List<PointF>();
+            LoadCsvFromFile(roadCsvFilePath);
+        }
+
+        /// <summary>
+        /// カンマ区切りかタブ区切りの道路上座標ＣＳＶファイルを読み込み、格納しておく
+        /// </summary>
+        /// <param name="roadCsvFilePath"></param>
+        private void LoadCsvFromFile(string roadCsvFilePath)
+        {
             using (var reader = new StreamReader(roadCsvFilePath))
             {
                 while (!reader.EndOfStream)

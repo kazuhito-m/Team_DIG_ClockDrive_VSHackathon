@@ -53,7 +53,7 @@ namespace ClockDrive
         }
 
         /// <summary>
-        /// コンストラクタ（背景画像を読み込むフォルダを決定し、背景画像のファイル名一覧を取得する）
+        /// コンストラクタ（背景画像を読み込むフォルダを受け取って、背景画像のファイル名一覧を取得する）
         /// </summary>
         /// <param name="imagePath"></param>
         public BackGround(string imagePath)
