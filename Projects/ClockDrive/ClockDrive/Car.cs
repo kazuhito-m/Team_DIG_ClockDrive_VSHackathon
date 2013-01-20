@@ -11,7 +11,21 @@ namespace ClockDrive
         /// <summary>
         /// 与えられた時刻
         /// </summary>
-        public DateTime time { get; private set; }
+        internal DateTime time;
+
+        /// <summary>
+        /// 車の位置や角度を算出するためのRoadインスタンス
+        /// </summary>
+        private Road road;
+
+        /// <summary>
+        /// コンストラクタ（Roadインスタンスを受け取って、格納しておく）
+        /// </summary>
+        /// <param name="road"></param>
+        public Car(Road road)
+        {
+            this.road = road;
+        }
 
         /// <summary>
         /// 基準時刻を与える
@@ -22,38 +36,30 @@ namespace ClockDrive
             time = t;
         }
 
-        public double CulcPositionAngleRatio()
-        {
-            double divider = ((double)(time.Hour % 12) / 12.0) + (double)(time.Minute % 60 / 60.0 / 12);
-            // (double)((time.Hour % 12) / 12.0 * 60 * 60) / (24 * 60 * 60); // ((time.Hour % 12) * 60 * 60 + (time.Minute % 60) * 60 + (time.Second % 60)) / (24 * 60 * 60);
-            return divider;
-        }
-
         /// <summary>
         /// 車を描くべき位置を取得する
         /// </summary>
-        public Point Position
+        public PointF Position
         {
             get
             {
-                double divider = CulcPositionAngleRatio() - 0.25;
-                var angle = (divider == 0 ? 0 : (Math.PI * 2) * divider);
-                return new Point(
-                    (int)(0 + 150 * Math.Cos(angle)),
-                    (int)(0 + 150 * Math.Sin(angle))
-                    );
+                return road.GetRoadPosition(time);
             }
         }
 
         /// <summary>
-        /// 車を描くべき角度を取得する
+        /// 車を描くべき角度を取得する（前後２点から滑らかに補完する）
         /// </summary>
         public double Angle
         {
             get
             {
-                return (CulcPositionAngleRatio() + 0.75) * 360;
-                //return new Random().NextDouble() * 360;
+                var posA = road.GetRoadPosition(time.AddSeconds(-5));
+                var posB = road.GetRoadPosition(time.AddSeconds(+5));
+                var xDiff = (posA.X - posB.X);
+                var yDiff = (posA.Y - posB.Y);
+                var angle = Math.Atan2(yDiff, xDiff);
+                return angle / Math.PI / 2.0 * 360.0 + 90.0;
             }
         }
     }
