@@ -1,3 +1,6 @@
 ■実行するには？
 \Projects\ClockDrive\ClockDrive\bin\Debug\ClockDrive.exe
 （※.NET Framework 4.0が必要です）
+
+■２４時間早回しとかは？
+フォーム上で右クリック
