@@ -13,17 +13,26 @@ namespace ClockDrive
     {
         private Form1 SUT;
 
+        /// <summary>
+        /// 生成時に、親フォームへの参照を退避しておく
+        /// </summary>
         public DebugForm(Form1 sut)
         {
             InitializeComponent();
             SUT = sut;
         }
 
+        /// <summary>
+        /// 時刻の初期値をセットしておく
+        /// </summary>
         private void DebugForm_Load(object sender, EventArgs e)
         {
             TimeHMS.Text = DateTime.Now.ToString();
         }
 
+        /// <summary>
+        /// 時刻値が変更されたら、親フォームの描画内容へ反映させる
+        /// </summary>
         private void TimeHMS_TextChanged(object sender, EventArgs e)
         {
             DateTime timeHMS;
@@ -31,6 +40,9 @@ namespace ClockDrive
             SUT.Draw(success ? timeHMS : DateTime.Now);
         }
 
+        /// <summary>
+        /// 早回しでシミュレート開始する（２４時間 or １時間）
+        /// </summary>
         private void Simulate_Click(object sender, EventArgs e)
         {
             var totalHours = (sender == Simulate24Hour ? 24 : 1);
@@ -39,7 +51,7 @@ namespace ClockDrive
             for (var i = 0; i <= (totalHours * 60 * 60); i += intervalSeconds)
             {
                 SUT.Draw(startTime.AddSeconds(i));
-                System.Windows.Forms.Application.DoEvents();
+                Application.DoEvents();
             }
         }
 

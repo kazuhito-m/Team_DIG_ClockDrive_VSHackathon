@@ -61,6 +61,7 @@ namespace ClockDrive
         {
             DrawBackGround(e.Graphics, currentTime);
             DrawCar(e.Graphics, currentTime);
+            DrawDigitalTime(e.Graphics, currentTime);
         }
 
         /// <summary>
@@ -101,11 +102,6 @@ namespace ClockDrive
                 new Rectangle(0, 0, this.Width, this.Height),
                 0, 0, destImage.Width, destImage.Height, GraphicsUnit.Pixel, ia
                 );
-
-            // デジタル時刻を描く
-            this.Text = string.Format("{0} - {1}", current.ToString(), Application.ProductName);
-            var fnt = new Font("MS UI Gothic", 40);
-            g.DrawString(current.ToLongTimeString(), fnt, Brushes.Gray, 20, this.Height - 100);
         }
 
         /// <summary>
@@ -129,6 +125,24 @@ namespace ClockDrive
                 );
 
             g.ResetTransform(); // ※行列をリセットし、直前までの状態を反映させない
+        }
+
+        /// <summary>
+        /// 指定された時刻に応じたデジタル時刻を描く
+        /// </summary>
+        /// <param name="current"></param>
+        private void DrawDigitalTime(Graphics g, DateTime current)
+        {
+            this.Text = string.Format("{0} - {1}", current.ToString(), Application.ProductName);
+            var fnt = new Font("MS UI Gothic", 40);
+            for (var i = 0; i < 2; i++)
+            {
+                g.DrawString(current.ToLongTimeString(),
+                             fnt,
+                             (i == 0 ? Brushes.DarkBlue : Brushes.LightBlue),
+                             20 - i * 1, this.Height - 100 - i * 2
+                             );
+            }
         }
 
         /// <summary>
