@@ -33,22 +33,12 @@ namespace ClockDrive
 
         private void Simulate_Click(object sender, EventArgs e)
         {
-            const int INTERVAL = 60 * 30;
-            var current = new DateTime(2000, 1, 1, 0, 0, 0);
-            for (var i = 0; i <= (24 * 60  * 60); i += INTERVAL)
+            var totalHours = (sender == Simulate24Hour ? 24 : 1);
+            var intervalSeconds = (sender == Simulate24Hour ? 60 * 20 : 45);
+            var startTime = (sender == Simulate24Hour ? new DateTime(2000, 1, 1, 0, 0, 0) : DateTime.Now);
+            for (var i = 0; i <= (totalHours * 60 * 60); i += intervalSeconds)
             {
-                SUT.Draw(current.AddSeconds(i));
-                System.Windows.Forms.Application.DoEvents();
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            const int INTERVAL = 60 * 1;
-            var current = new DateTime(2000, 1, 1, 0, 0, 0);
-            for (var i = ((17 + 0) * 60 * 60); i <= ((17 + 1) * 60 * 60); i += INTERVAL)
-            {
-                SUT.Draw(current.AddSeconds(i));
+                SUT.Draw(startTime.AddSeconds(i));
                 System.Windows.Forms.Application.DoEvents();
             }
         }

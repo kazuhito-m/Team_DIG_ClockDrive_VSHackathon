@@ -11,7 +11,7 @@ namespace ClockDrive
         /// <summary>
         /// 与えられた時刻
         /// </summary>
-        public DateTime time { get; private set; }
+        internal DateTime time;
 
         /// <summary>
         /// 基準時刻を与える

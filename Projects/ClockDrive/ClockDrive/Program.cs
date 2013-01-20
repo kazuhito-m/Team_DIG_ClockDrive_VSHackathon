@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Runtime.CompilerServices;
+
+// NUnitテストプロジェクトから、Internalを参照可能にする
+[assembly: InternalsVisibleTo("ClockDriveTest")]
 
 namespace ClockDrive
 {

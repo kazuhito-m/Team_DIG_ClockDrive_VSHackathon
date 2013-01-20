@@ -30,8 +30,8 @@
         {
             this.TimeHMS = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.Simulate = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.Simulate24Hour = new System.Windows.Forms.Button();
+            this.Simulate1Hour = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // TimeHMS
@@ -51,35 +51,35 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "時刻？(HH:MM:SS)";
             // 
-            // Simulate
+            // Simulate24Hour
             // 
-            this.Simulate.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.Simulate.Location = new System.Drawing.Point(14, 88);
-            this.Simulate.Name = "Simulate";
-            this.Simulate.Size = new System.Drawing.Size(322, 78);
-            this.Simulate.TabIndex = 2;
-            this.Simulate.Text = "２４時間ぐるっと回す！！";
-            this.Simulate.UseVisualStyleBackColor = true;
-            this.Simulate.Click += new System.EventHandler(this.Simulate_Click);
+            this.Simulate24Hour.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.Simulate24Hour.Location = new System.Drawing.Point(14, 88);
+            this.Simulate24Hour.Name = "Simulate24Hour";
+            this.Simulate24Hour.Size = new System.Drawing.Size(322, 78);
+            this.Simulate24Hour.TabIndex = 2;
+            this.Simulate24Hour.Text = "２４時間ぐるっと回す！！";
+            this.Simulate24Hour.UseVisualStyleBackColor = true;
+            this.Simulate24Hour.Click += new System.EventHandler(this.Simulate_Click);
             // 
-            // button1
+            // Simulate1Hour
             // 
-            this.button1.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.button1.Location = new System.Drawing.Point(12, 172);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(322, 78);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "１時間ドライブする！！";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.Simulate1Hour.Font = new System.Drawing.Font("MS UI Gothic", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.Simulate1Hour.Location = new System.Drawing.Point(12, 172);
+            this.Simulate1Hour.Name = "Simulate1Hour";
+            this.Simulate1Hour.Size = new System.Drawing.Size(322, 78);
+            this.Simulate1Hour.TabIndex = 3;
+            this.Simulate1Hour.Text = "１時間ドライブする！！";
+            this.Simulate1Hour.UseVisualStyleBackColor = true;
+            this.Simulate1Hour.Click += new System.EventHandler(this.Simulate_Click);
             // 
             // DebugForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(348, 262);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.Simulate);
+            this.Controls.Add(this.Simulate1Hour);
+            this.Controls.Add(this.Simulate24Hour);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.TimeHMS);
             this.Name = "DebugForm";
@@ -94,7 +94,7 @@
 
         private System.Windows.Forms.TextBox TimeHMS;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button Simulate;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button Simulate24Hour;
+        private System.Windows.Forms.Button Simulate1Hour;
     }
 }
