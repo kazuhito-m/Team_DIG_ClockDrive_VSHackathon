@@ -118,7 +118,7 @@ namespace ClockDrive
 
             g.TranslateTransform(car.Position.X, car.Position.Y);   //時刻に応じた適切な位置へ移動させる
             g.RotateTransform((float)(car.Angle));                  //回転させる
-            g.DrawImageUnscaled(
+            g.DrawImage(
                 carImage,
                 new Rectangle(
                     (int)(carImage.Width * stretchRatio * -0.5F), (int)(carImage.Height * stretchRatio * -0.5F),
@@ -146,13 +146,16 @@ namespace ClockDrive
             }
         }
 
+        private Point previousPosition;
+
         /// <summary>
-        /// デバッグビルド専用、右クリックにより、時刻を強制指定できる別画面を表示する。
-        /// なお、同時に、タイマーを停止する。
+        /// マウスボタン押下への応答
         /// </summary>
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
+            previousPosition = e.Location;
 #if DEBUG
+            // デバッグビルド専用、右クリックにより、時刻を強制指定できる別画面を表示する。（タイマーを停止する）
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
                 timer1.Enabled = false;
@@ -160,8 +163,23 @@ namespace ClockDrive
                 debugForm.Show();
                 debugForm.Left = this.Left + this.Width;
                 debugForm.Top = this.Bottom - this.Height;
+
+                //画面からはみ出しちゃったら、反対側に表示する
+                if (debugForm.Right > Screen.GetWorkingArea(this).Right) debugForm.Left = this.Left - debugForm.Width;
             }
 #endif
+        }
+
+        /// <summary>
+        /// 左ドラッグでフォーム移動
+        /// </summary>
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                this.Left += (e.X - previousPosition.X);
+                this.Top += (e.Y - previousPosition.Y);
+            }
         }
     }
 }
