@@ -147,5 +147,13 @@ namespace ClockDrive
             }
         }
 
+        /// <summary>
+        /// 閉じるとき、タイマーを再開する
+        /// </summary>
+        private void DebugForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            SUT.EnableTimer();
+        }
+
     }
 }

@@ -7,12 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace ClockDrive
 {
     public partial class Form1 : Form
     {
+        [DllImport("user32.dll")]
+        static extern int SetWindowRgn(IntPtr hWnd, IntPtr hRgn, bool bRedraw);
 
+        [DllImport("gdi32.dll")]
+        static extern IntPtr CreateRoundRectRgn(int x1, int y1, int x2, int y2, int cx, int cy);
+ 
         internal BackGround bg;
         internal Road road;
         internal Car car;
@@ -34,8 +40,20 @@ namespace ClockDrive
             cloud = new Cloud(Width, Height, 15);
             ImageCache = new Dictionary<string, Bitmap>();
 
+            // このウインドウの角を丸める
+            IntPtr rgn1 = CreateRoundRectRgn(0, 0, 512, 512, 128, 128);
+            SetWindowRgn(Handle, rgn1, true);
+
             // 最初に、現在時刻の状態を描いておく
             Draw(DateTime.Now);
+        }
+
+        /// <summary>
+        /// タイマーを開始する
+        /// </summary>
+        public void EnableTimer()
+        {
+            timer1.Enabled = true;
         }
 
         /// <summary>
