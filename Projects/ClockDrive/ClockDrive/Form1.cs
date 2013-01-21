@@ -13,9 +13,11 @@ namespace ClockDrive
     public partial class Form1 : Form
     {
 
-        private BackGround bg;
-        private Road road;
-        private Car car;
+        internal BackGround bg;
+        internal Road road;
+        internal Car car;
+        internal Cloud cloud;
+
         private Dictionary<string, Bitmap> ImageCache;
         private DateTime currentTime;
 
@@ -29,6 +31,7 @@ namespace ClockDrive
             bg = new BackGround(Application.StartupPath + @"\images\");
             road = new Road(Application.StartupPath + @"\datas\RoadData.csv");
             car = new Car(road);
+            cloud = new Cloud(Width, Height, 15);
             ImageCache = new Dictionary<string, Bitmap>();
 
             // 最初に、現在時刻の状態を描いておく
@@ -40,6 +43,7 @@ namespace ClockDrive
         /// </summary>
         private void timer1_Tick(object sender, EventArgs e)
         {
+            cloud.Move(1);
             Draw(DateTime.Now);
         }
 
@@ -61,9 +65,12 @@ namespace ClockDrive
         /// </summary>
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            DrawBackGround(e.Graphics, currentTime);
-            DrawCar(e.Graphics, currentTime);
-            DrawDigitalTime(e.Graphics, currentTime);
+            var g = e.Graphics;
+
+            DrawBackGround(g, currentTime);
+            DrawCar(g, currentTime);
+            DrawClouds(g);
+            DrawDigitalTime(g, currentTime);
         }
 
         /// <summary>
@@ -95,7 +102,7 @@ namespace ClockDrive
             // ブレンド元の背景画像を描く（不透明ベタ塗り）
             g.DrawImage(
                 srcImage,
-                new Rectangle(0, 0, this.Width, this.Height)
+                0, 0, this.Width, this.Height
                 );
 
             // ブレンド先の背景画像を描く（半透明）
@@ -129,19 +136,33 @@ namespace ClockDrive
         }
 
         /// <summary>
+        /// 雲の影を描く
+        /// </summary>
+        /// <param name="current"></param>
+        private void DrawClouds(Graphics g)
+        {
+            var cloudImage = GetCachedBitmap(Application.StartupPath + @"\images\cloud.png");
+            foreach (var p in cloud.Positions)
+                g.DrawImage(
+                    cloudImage,
+                    p.X, p.Y, cloudImage.Width, cloudImage.Height
+                    );
+        }
+
+        /// <summary>
         /// 指定された時刻に応じたデジタル時刻を描く
         /// </summary>
         /// <param name="current"></param>
         private void DrawDigitalTime(Graphics g, DateTime current)
         {
             this.Text = string.Format("{0} - {1}", current.ToString(), Application.ProductName);
-            var f = new Font("MS UI Gothic", 40);
+            var f = this.Font;
             for (var i = 0; i < 2; i++)
             {
                 g.DrawString(current.ToLongTimeString(),
                              f,
                              (i == 0 ? Brushes.DarkBlue : Brushes.LightBlue),
-                             20 - i * 1, this.Height - 100 - i * 2
+                             20 - i * 1, this.Height - 60 - i * 2
                              );
             }
         }

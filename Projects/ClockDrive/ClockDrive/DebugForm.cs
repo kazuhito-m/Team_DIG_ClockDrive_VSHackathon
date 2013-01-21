@@ -55,10 +55,11 @@ namespace ClockDrive
             watch.Start();
 
             var totalHours = (sender == Simulate24Hour ? 24 : 1);
-            var intervalSeconds = (sender == Simulate24Hour ? 240 : 45);
+            var intervalSeconds = (sender == Simulate24Hour ? 90 : 15);
             var startTime = (sender == Simulate24Hour ? new DateTime(2000, 1, 1, 0, 0, 0) : DateTime.Now);
             for (var i = 0; i <= (totalHours * 60 * 60); i += intervalSeconds)
             {
+                SUT.cloud.Move(1);
                 SUT.Draw(startTime.AddSeconds(i));
                 Application.DoEvents();
             }
