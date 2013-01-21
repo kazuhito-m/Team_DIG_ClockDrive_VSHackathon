@@ -85,6 +85,8 @@ namespace ClockDrive
             var result = MessageBox.Show(instruction, "道の軌跡を、手動で記録する", MessageBoxButtons.OKCancel);
             if (result == System.Windows.Forms.DialogResult.Cancel) return;
 
+            //TODO: ガイドラインとして、中心から１２等分する放射線を描く
+
             timer1.Enabled = true;
             recordStarted = DateTime.Now;
             recordRoad.roadPositions.Clear();
@@ -101,6 +103,9 @@ namespace ClockDrive
             if (recordingHour >= 12)
             {
                 timer1.Enabled = false;
+
+                //TODO: 動きノイズ低減のため、ローパスフィルタを適用する（過去５回ぶんのサンプルで平滑化する）
+
                 var exportFilePath = Application.StartupPath + string.Format(@"\datas\RoadData.{0}.csv", DateTime.Now.ToString("yyyyMMdd_HHmmss"));
                 using (var writer = new StreamWriter(exportFilePath))
                 {
@@ -125,7 +130,9 @@ namespace ClockDrive
             if (recordingHour >= 0)
             {
                 var pos = SUT.PointToClient(Cursor.Position);
-                recordRoad.roadPositions.Add(pos);
+                if (!pos.Equals(recordRoad.roadPositions[recordRoad.roadPositions.Count - 1]))
+                    recordRoad.roadPositions.Add(pos);
+
                 using (var g = SUT.CreateGraphics())
                 {
                     var color = Color.FromArgb((int)(elapsed * 256 / intervalSeconds), 128, 255 - (int)(elapsed * 256 / intervalSeconds));
@@ -133,6 +140,9 @@ namespace ClockDrive
                     g.DrawString(string.Format("{0}→{1}", (int)recordingHour, (int)recordingHour + 1),
                                  f, new SolidBrush(color), pos.X, pos.Y
                                  );
+
+                    //TODO: ガイドラインとして、短針の現在角度を描く
+
                 }
             }
         }

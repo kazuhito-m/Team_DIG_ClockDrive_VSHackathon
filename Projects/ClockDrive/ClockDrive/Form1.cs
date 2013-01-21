@@ -150,7 +150,7 @@ namespace ClockDrive
         }
 
         /// <summary>
-        /// 指定された時刻に応じたデジタル時刻を描く
+        /// 指定された時刻に応じて、フォームのフォントを用いて、デジタル時刻を描く
         /// </summary>
         /// <param name="current"></param>
         private void DrawDigitalTime(Graphics g, DateTime current)
@@ -175,20 +175,6 @@ namespace ClockDrive
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             previousPosition = e.Location;
-#if DEBUG
-            // デバッグビルド専用、右クリックにより、時刻を強制指定できる別画面を表示する。（タイマーを停止する）
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                timer1.Enabled = false;
-                var debugForm = new DebugForm(this);
-                debugForm.Show();
-                debugForm.Left = this.Left + this.Width;
-                debugForm.Top = this.Bottom - this.Height;
-
-                //画面からはみ出しちゃったら、反対側に表示する
-                if (debugForm.Right > Screen.GetWorkingArea(this).Right) debugForm.Left = this.Left - debugForm.Width;
-            }
-#endif
         }
 
         /// <summary>
@@ -202,5 +188,45 @@ namespace ClockDrive
                 this.Top += (e.Y - previousPosition.Y);
             }
         }
+
+        #region コンテキストメニュー
+
+        /// <summary>
+        /// 終了メニュー
+        /// </summary>
+        private void ExitMenu_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        /// <summary>
+        /// タイマー停止と再開
+        /// </summary>
+        private void ToggleTimerMenu_Click(object sender, EventArgs e)
+        {
+            timer1.Enabled = !timer1.Enabled;
+        }
+
+        /// <summary>
+        /// 開発用メニュー
+        /// </summary>
+        private void DebugMenu_Click(object sender, EventArgs e)
+        {
+#if DEBUG
+            // デバッグビルド専用、右クリックにより、時刻を強制指定できる別画面を表示する。（タイマーを停止する）
+            timer1.Enabled = false;
+            var debugForm = new DebugForm(this);
+            debugForm.Show();
+
+            debugForm.Left = this.Left + this.Width;
+            debugForm.Top = this.Bottom - this.Height;
+
+            //画面からはみ出しちゃったら、反対側に表示する
+            if (debugForm.Right > Screen.GetWorkingArea(this).Right) debugForm.Left = this.Left - debugForm.Width;
+#endif
+        }
+
+        #endregion
+
     }
 }
