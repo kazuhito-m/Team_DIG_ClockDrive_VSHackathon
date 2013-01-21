@@ -112,13 +112,13 @@ namespace ClockDrive
         private void DrawCar(Graphics g, DateTime current)
         {
             var carImage = GetCachedBitmap(Application.StartupPath + @"\images\car.png");
-            const float stretchRatio = 0.5F;
+            const float stretchRatio = 1F;
 
             g.ResetTransform(); // ※行列をリセットし、直前までの状態を反映させない
 
             g.TranslateTransform(car.Position.X, car.Position.Y);   //時刻に応じた適切な位置へ移動させる
             g.RotateTransform((float)(car.Angle));                  //回転させる
-            g.DrawImage(
+            g.DrawImageUnscaled(
                 carImage,
                 new Rectangle(
                     (int)(carImage.Width * stretchRatio * -0.5F), (int)(carImage.Height * stretchRatio * -0.5F),
