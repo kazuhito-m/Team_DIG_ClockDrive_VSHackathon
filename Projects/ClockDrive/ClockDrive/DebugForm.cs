@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Diagnostics;
 
 namespace ClockDrive
 {
@@ -50,6 +51,9 @@ namespace ClockDrive
         /// </summary>
         private void Simulate_Click(object sender, EventArgs e)
         {
+            var watch = new Stopwatch();
+            watch.Start();
+
             var totalHours = (sender == Simulate24Hour ? 24 : 1);
             var intervalSeconds = (sender == Simulate24Hour ? 240 : 45);
             var startTime = (sender == Simulate24Hour ? new DateTime(2000, 1, 1, 0, 0, 0) : DateTime.Now);
@@ -58,6 +62,9 @@ namespace ClockDrive
                 SUT.Draw(startTime.AddSeconds(i));
                 Application.DoEvents();
             }
+
+            watch.Stop();
+            this.Text = string.Format("所要時間は {0:0.000}秒 でした", watch.ElapsedMilliseconds * 0.001);
         }
 
         /// <summary>

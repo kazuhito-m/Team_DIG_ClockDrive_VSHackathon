@@ -120,9 +120,9 @@ namespace ClockDrive
             g.RotateTransform((float)(car.Angle));                  //回転させる
             g.DrawImage(
                 carImage,
-                new RectangleF(
-                    carImage.Width * stretchRatio * -0.5F, carImage.Height * stretchRatio * -0.5F,
-                    carImage.Width * stretchRatio, carImage.Height * stretchRatio)
+                new Rectangle(
+                    (int)(carImage.Width * stretchRatio * -0.5F), (int)(carImage.Height * stretchRatio * -0.5F),
+                    (int)(carImage.Width * stretchRatio), (int)(carImage.Height * stretchRatio))
                 );
 
             g.ResetTransform(); // ※行列をリセットし、直前までの状態を反映させない
