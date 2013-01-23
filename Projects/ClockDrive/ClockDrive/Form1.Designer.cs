@@ -32,16 +32,15 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ExitMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.DebugMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ToggleTimerMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.DebugMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // contextMenuStrip1
@@ -61,13 +60,6 @@
             this.ExitMenu.Text = "終了する(&X)";
             this.ExitMenu.Click += new System.EventHandler(this.ExitMenu_Click);
             // 
-            // DebugMenu
-            // 
-            this.DebugMenu.Name = "DebugMenu";
-            this.DebugMenu.Size = new System.Drawing.Size(202, 22);
-            this.DebugMenu.Text = "開発用(&D)";
-            this.DebugMenu.Click += new System.EventHandler(this.DebugMenu_Click);
-            // 
             // ToggleTimerMenu
             // 
             this.ToggleTimerMenu.Name = "ToggleTimerMenu";
@@ -79,6 +71,13 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(199, 6);
+            // 
+            // DebugMenu
+            // 
+            this.DebugMenu.Name = "DebugMenu";
+            this.DebugMenu.Size = new System.Drawing.Size(202, 22);
+            this.DebugMenu.Text = "開発用(&D)";
+            this.DebugMenu.Click += new System.EventHandler(this.DebugMenu_Click);
             // 
             // Form1
             // 

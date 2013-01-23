@@ -13,9 +13,11 @@ namespace ClockDrive
 {
     public partial class Form1 : Form
     {
+        /// <summary>ウインドウの角丸化</summary>
         [DllImport("user32.dll")]
         static extern int SetWindowRgn(IntPtr hWnd, IntPtr hRgn, bool bRedraw);
 
+        /// <summary>ウインドウの角丸化</summary>
         [DllImport("gdi32.dll")]
         static extern IntPtr CreateRoundRectRgn(int x1, int y1, int x2, int y2, int cx, int cy);
  
@@ -38,6 +40,7 @@ namespace ClockDrive
             road = new Road(Application.StartupPath + @"\datas\RoadData.csv");
             car = new Car(road);
             cloud = new Cloud(Width, Height, 15);
+
             ImageCache = new Dictionary<string, Bitmap>();
 
             // このウインドウの角を丸める
