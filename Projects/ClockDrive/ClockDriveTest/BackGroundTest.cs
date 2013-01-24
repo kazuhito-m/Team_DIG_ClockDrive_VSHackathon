@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ClockDrive;
 using NUnit.Framework;
+using System.Windows.Forms;
 
 namespace ClockDriveTest
 {
@@ -15,7 +16,9 @@ namespace ClockDriveTest
         [SetUp]
         public void Setup()
         {
-            bg = new BackGround(@"C:\Dev_Private\Team_DIG_ClockDrive_VSHackathon\Projects\ClockDrive\ClockDrive\bin\Debug\images\");
+			// 環境依存を減らすため、現在pathから類推
+			string path = System.IO.Directory.GetCurrentDirectory().Replace("DriveTest" , "Drive") + "/images/";
+            bg = new BackGround(path);
         }
 
         [TestCase]
@@ -28,6 +31,7 @@ namespace ClockDriveTest
         public void プロパティが読める()
         {
             string pathA = bg.SrcImagePath;
+
             string pathB = bg.DestImagePath;
             double blendRate = bg.BlendRatio;
         }
@@ -48,7 +52,7 @@ namespace ClockDriveTest
         [TestCase(11, 59, 59, "bg02.png", "bg03.png", 1.0 - (1.0 / 60.0 / 60.0 / 6.0))]
         [TestCase(12, 0, 0, "bg03.png", "bg04.png", 0)]
         [TestCase(23, 59, 59, "bg04.png", "bg01.png", 1.0 - (1.0 / 60.0 / 60.0 / 6.0))]
-        public void 背景４枚のとき_時刻指定に応じた_適切な画像ファイルパスのペアとブレンド率を返す(int hour, int minute, int second, string bgA, string bgB, double blend)
+        public void 背景4枚のとき_時刻指定に応じた_適切な画像ファイルパスのペアとブレンド率を返す(int hour, int minute, int second, string bgA, string bgB, double blend)
         {
             bg.ImageFileNames = new string[] { "bg01.png", "bg02.png", "bg03.png", "bg04.png" };
 
@@ -64,7 +68,7 @@ namespace ClockDriveTest
         [TestCase(7, 59, 59, "bg02.png", "bg03.png", 1.0 - (1.0 / 60.0 / 60.0 / 4.0))]
         [TestCase(8, 0, 0, "bg03.png", "bg04.png", 0)]
         [TestCase(23, 59, 59, "bg06.png", "bg01.png", 1.0 - (1.0 / 60.0 / 60.0 / 4.0))]
-        public void 背景６枚のときも_時刻指定に応じた_適切な画像ファイルパスのペアとブレンド率を返す(int hour, int minute, int second, string bgA, string bgB, double blend)
+        public void 背景6枚のときも_時刻指定に応じた_適切な画像ファイルパスのペアとブレンド率を返す(int hour, int minute, int second, string bgA, string bgB, double blend)
         {
             bg.ImageFileNames = new string[] { "bg01.png", "bg02.png", "bg03.png", "bg04.png", "bg05.png", "bg06.png" };
 
