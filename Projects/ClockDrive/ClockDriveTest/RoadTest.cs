@@ -5,6 +5,7 @@ using System.Text;
 using ClockDrive;
 using NUnit.Framework;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace ClockDriveTest
 {
@@ -16,7 +17,9 @@ namespace ClockDriveTest
         [SetUp]
         public void Setup()
         {
-            road = new Road(@"C:\Dev_Private\Team_DIG_ClockDrive_VSHackathon\Projects\ClockDrive\ClockDrive\datas\RoadData.csv");
+			// 環境依存を減らすため、現在pathから類推
+			string path = System.IO.Directory.GetCurrentDirectory().Replace("DriveTest" , "Drive") + "/datas/RoadData.csv";
+			road = new Road(path);
         }
 
         [TestCase]
