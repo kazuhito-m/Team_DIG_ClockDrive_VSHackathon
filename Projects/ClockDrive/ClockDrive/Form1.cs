@@ -14,12 +14,12 @@ namespace ClockDrive
     public partial class Form1 : Form
     {
         /// <summary>ウインドウの角丸化</summary>
-        [DllImport("user32.dll")]
-        static extern int SetWindowRgn(IntPtr hWnd, IntPtr hRgn, bool bRedraw);
+//        [DllImport("user32.dll")]
+//        static extern int SetWindowRgn(IntPtr hWnd, IntPtr hRgn, bool bRedraw);
 
         /// <summary>ウインドウの角丸化</summary>
-        [DllImport("gdi32.dll")]
-        static extern IntPtr CreateRoundRectRgn(int x1, int y1, int x2, int y2, int cx, int cy);
+//        [DllImport("gdi32.dll")]
+//        static extern IntPtr CreateRoundRectRgn(int x1, int y1, int x2, int y2, int cx, int cy);
  
         internal BackGround bg;
         internal Road road;
@@ -36,16 +36,16 @@ namespace ClockDrive
         {
             InitializeComponent();
 
-            bg = new BackGround(Application.StartupPath + @"\images\");
-            road = new Road(Application.StartupPath + @"\datas\RoadData.csv");
+            bg = new BackGround(Application.StartupPath + @"/images/");
+            road = new Road(Application.StartupPath + @"/datas/RoadData.csv");
             car = new Car(road);
             cloud = new Cloud(Width, Height, 15);
 
             ImageCache = new Dictionary<string, Bitmap>();
 
             // このウインドウの角を丸める
-            IntPtr rgn1 = CreateRoundRectRgn(0, 0, 512, 512, 128, 128);
-            SetWindowRgn(Handle, rgn1, true);
+//            IntPtr rgn1 = CreateRoundRectRgn(0, 0, 512, 512, 128, 128);
+//            SetWindowRgn(Handle, rgn1, true);
 
             // 最初に、現在時刻の状態を描いておく
             Draw(DateTime.Now);
@@ -102,7 +102,7 @@ namespace ClockDrive
         private Bitmap GetCachedBitmap(string filePath)
         {
             // 画像キャッシュにまだ格納されてなければ、実際にファイルから読み込む
-            if (!ImageCache.ContainsKey(filePath)) ImageCache[filePath] = new Bitmap(filePath);
+			if (!ImageCache.ContainsKey(filePath)) ImageCache[filePath] = new Bitmap(filePath);
             return ImageCache[filePath];
         }
 
@@ -139,7 +139,7 @@ namespace ClockDrive
         /// </summary>
         private void DrawCar(Graphics g, DateTime current)
         {
-            var carImage = GetCachedBitmap(Application.StartupPath + @"\images\car.png");
+            var carImage = GetCachedBitmap(Application.StartupPath + @"/images/car.png");
             const float stretchRatio = 1F;
 
             g.ResetTransform(); // ※行列をリセットし、直前までの状態を反映させない
@@ -162,7 +162,7 @@ namespace ClockDrive
         /// <param name="current"></param>
         private void DrawClouds(Graphics g)
         {
-            var cloudImage = GetCachedBitmap(Application.StartupPath + @"\images\cloud.png");
+            var cloudImage = GetCachedBitmap(Application.StartupPath + @"/images/cloud.png");
             foreach (var p in cloud.Positions)
                 g.DrawImage(
                     cloudImage,
