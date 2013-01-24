@@ -5,5 +5,6 @@ obj/
 *.vshost.*
 *.VisualState.xml
 /Projects/ClockDrive/ClockDrive/*.user
+/Projects/ClockDrive/ClockDrive/bin*
 /Projects/ClockDrive/ClockDriveTest/bin*
 TestResult.xml
