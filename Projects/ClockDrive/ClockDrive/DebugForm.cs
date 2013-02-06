@@ -25,7 +25,7 @@ namespace ClockDrive
         {
             InitializeComponent();
             SUT = sut;
-            recordRoad = new Road(Application.StartupPath + @"\datas\RoadData.csv");
+            recordRoad = new Road(Application.StartupPath + @"/datas/RoadData.csv");
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace ClockDrive
 
                 //TODO: 動きノイズ低減のため、ローパスフィルタを適用する（過去５回ぶんのサンプルで平滑化する）
 
-                var exportFilePath = Application.StartupPath + string.Format(@"\datas\RoadData.{0}.csv", DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+                var exportFilePath = Application.StartupPath + string.Format(@"/datas/RoadData.{0}.csv", DateTime.Now.ToString("yyyyMMdd_HHmmss"));
                 using (var writer = new StreamWriter(exportFilePath))
                 {
                     foreach(var pos in recordRoad.roadPositions)
@@ -130,8 +130,11 @@ namespace ClockDrive
             if (recordingHour >= 0)
             {
                 var pos = SUT.PointToClient(Cursor.Position);
-                if (!pos.Equals(recordRoad.roadPositions[recordRoad.roadPositions.Count - 1]))
-                    recordRoad.roadPositions.Add(pos);
+				// 未記録 or 移動している(直近(最後のレコード)位置と異なる)なら
+				if (recordRoad.roadPositions.Count == 0 || 
+				    !pos.Equals(recordRoad.roadPositions.Last())) {
+                    recordRoad.roadPositions.Add(pos);	// 座標を記録
+				}
 
                 using (var g = SUT.CreateGraphics())
                 {
